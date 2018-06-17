@@ -2,11 +2,11 @@ import time
 import pandas as pd
 import numpy as np
 
-CITY_DATA = { 'Chicago': 'chicago.csv',
-              'New York': 'new_york_city.csv',
-              'Washington': 'washington.csv' }
+CITY_DATA = { 'chicago': 'chicago.csv',
+              'new york': 'new_york_city.csv',
+              'washington': 'washington.csv' }
 
-CITIES = ['Chicago','New York','Washington']
+CITIES = ['chicago','new york','washington']
 
 def get_filters():
     """
@@ -20,7 +20,7 @@ def get_filters():
     print('Hello! Let\'s explore some US bikeshare data!')
     # get user input for city (chicago, new york city, washington). HINT: Use a while loop to handle invalid inputs
     while True:
-        city = input("Would you like to see data for Chicago, New York, or Washington?")
+        city = input("Would you like to see data for Chicago, New York, or Washington?").lower()
         if city in CITIES:
             break
         else:
@@ -71,15 +71,18 @@ def time_stats(df):
 
     # display the most common month
     common_month = df['month'].mode()[0]
-    print('Most Common Month:',common_month)
+    common_month_counts = df['month'].value_counts().max()
+    print('Most Common Month is {} and count is {}.'.format(common_month,common_month_counts))
 
     # display the most common day of week
     common_weekday = df['day_of_week'].mode()[0]
-    print('Most Common Day of Week:',common_weekday)
+    common_weekday_counts = df['day_of_week'].value_counts().max()
+    print('Most Common Day of Week is {} and count is {}.'.format(common_weekday, common_weekday_counts))
 
     # display the most common start hour
     common_hour = df['hour'].mode()[0]
-    print('Most Common Hour:',common_hour)
+    common_hour_counts = df['hour'].value_counts().max()
+    print('Most Common Hour is {} and count is {}.'.format(common_hour, common_hour_counts))
 
     #print("\nThis took %s seconds." % (time.time() - start_time))
     print('-'*40)
@@ -102,7 +105,7 @@ def station_stats(df):
     print('Most Common End Station:',common_end_station)
 
     # display most frequent combination of start station and end station trip
-    common_start_end_station = df[['Start Station','End Station']].mode().loc[0]
+    common_start_end_station = df[['Start Station','End Station']].mode().iloc[0] # iloc for integer indexing
     print('Most Common Start-End Station Combination: {} and {}'.format(common_start_end_station[0],common_start_end_station[1]))
 
     #print("\nThis took %s seconds." % (time.time() - start_time))
@@ -134,7 +137,7 @@ def user_type(df):
     #start_time = time.time()
 
     # Display counts of user types
-    user_type_nulls = df['User Type'].isnull().any()
+    user_type_nulls = df['User Type'].isnull().any() # returns True if there are missing values
     if user_type_nulls == True:
         print("There are some missing values...but we'll ignore those.")
     user_types = df['User Type'].value_counts()
@@ -193,7 +196,7 @@ def main():
         station_stats(df)
         trip_duration_stats(df)
         user_type(df)
-        if city == 'Washington':
+        if city == 'washington':
             print("Sorry, we don't have gender and birth year stats for Washington.")
         else:
             other_user_stats(df)
