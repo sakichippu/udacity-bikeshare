@@ -7,6 +7,8 @@ CITY_DATA = { 'chicago': 'chicago.csv',
               'washington': 'washington.csv' }
 
 CITIES = ['chicago','new york','washington']
+MONTHS = ['january','february','march','april','may','june']
+DAYS = ['monday','tuesday','wednesday','thursday','friday','saturday','sunday']
 
 def get_filters():
     """
@@ -27,10 +29,20 @@ def get_filters():
             print("Sorry! It seems you have a typo or inputted a wrong city. We can only handle Chicago, New York, or Washington. Try again!  ")
 
     # get user input for month (all, january, february, ... , june)
-    month = input("Which month - January, February, March, April, May, or June? Type 'All' if no month filter.")
+    while True:
+        month = input("Which month - january, february, march, april, may, or june? Type 'all' if no month filter.").lower()
+        if month in MONTHS:
+            break
+        else:
+             print("Sorry! It seems you have a typo or inputted a wrong month. We can only handle January through June. Try again!  ")
 
     # get user input for day of week (all, monday, tuesday, ... sunday)
-    day = input("Which day - Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, or Sunday? Type 'All' if no day filter.")
+    while True:
+        day = input("Which day - monday, tuesday, wednesday, thursday, friday, saturday, or sunday? Type 'all' if no day filter.").lower()
+        if day in DAYS:
+            break
+        else:
+            print("Sorry! It seems you have a typo or inputted a wrong day. We can only handle Monday through Sunday. Try again!  ")
 
     print('-'*40)
     return city, month, day
@@ -53,12 +65,12 @@ def load_data(city, month, day):
     df['day_of_week'] = df['Start Time'].dt.weekday_name
     df['hour'] = df['Start Time'].dt.hour
 
-    if month != 'All':
-        months = ['January','February','March','April','May','June']
+    if month != 'all':
+        months = ['january','february','march','april','may','june']
         month = months.index(month) + 1 # to make 1=January, 6=June
         df = df[df['month'] == month]
 
-    if day != 'All':
+    if day != 'all':
         df = df[df['day_of_week'] == day.title()]
 
     return df
