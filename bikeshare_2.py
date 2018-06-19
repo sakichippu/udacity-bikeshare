@@ -6,9 +6,9 @@ CITY_DATA = { 'chicago': 'chicago.csv',
               'new york': 'new_york_city.csv',
               'washington': 'washington.csv' }
 
-CITIES = ['chicago','new york','washington']
-MONTHS = ['january','february','march','april','may','june']
-DAYS = ['monday','tuesday','wednesday','thursday','friday','saturday','sunday']
+#CITIES = ['chicago','new york','washington'] Don't need to define - use CITY_DATA.keys()
+MONTHS = ['all','january','february','march','april','may','june']
+DAYS = ['all','monday','tuesday','wednesday','thursday','friday','saturday','sunday']
 
 def get_filters():
     """
@@ -23,7 +23,7 @@ def get_filters():
     # get user input for city (chicago, new york city, washington). HINT: Use a while loop to handle invalid inputs
     while True:
         city = input("Would you like to see data for Chicago, New York, or Washington?").lower()
-        if city in CITIES:
+        if city in CITY_DATA.keys():
             break
         else:
             print("Sorry! It seems you have a typo or inputted a wrong city. We can only handle Chicago, New York, or Washington. Try again!  ")
@@ -66,8 +66,8 @@ def load_data(city, month, day):
     df['hour'] = df['Start Time'].dt.hour
 
     if month != 'all':
-        months = ['january','february','march','april','may','june']
-        month = months.index(month) + 1 # to make 1=January, 6=June
+        month = MONTHS.index(month)
+        # by having 'all' as the first element of MONTHS list, the month (as a number) matches up with the list index!
         df = df[df['month'] == month]
 
     if day != 'all':
@@ -188,13 +188,13 @@ def disp_raw_data(df):
 
     """Displays raw data used to compute statistics."""
 
-    disp_data = input("Would you like to see a couple of raw data used to compute the above statistics? Type 'Y' or 'N'. (Expand your window to see the data unabbreviated.)")
+    disp_data = input("Would you like to see a couple of raw data used to compute the above statistics? Type 'yes' or 'no'. (Expand your window to see the data unabbreviated.)").lower()
     index = 0
-    if disp_data == 'Y':
+    if disp_data == 'yes':
         print('\nDisplaying some raw data...\n')
         print(df[index:index+5])
         index += 5
-    elif disp_data == 'N':
+    elif disp_data == 'no':
         print("Ok, we won't bombard you with more info.")
 
     print('-'*40)
